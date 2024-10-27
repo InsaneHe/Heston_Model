@@ -310,3 +310,9 @@ The get_history_best_xy function is used to retrieve the historical optimal solu
 2.  Find the Optimal Function Value: Identify the minimum function value f_best from all the f values.
 3. Locate the Corresponding Optimal Solution: Find the corresponding x_best that matches the optimal function value f_best.
 4. Return the Optimal Solution: Return the optimal solution x_best and the optimal function value f_best.
+
+## getdata.py
+
+** Functions:**
+
+Can be used for user's own remodeling in order to allow users to get the data they need from databases (Tushare), etc. for research or applications.
