@@ -10,7 +10,7 @@
 + 整体拟合优度：BSM模型 > Heston模型  
 + BSM模型对短到期期限、低价值的期权拟合效果相对较好， Heston模型对低执行价、短到期期限、低价值的期权拟合效果较好。  
 
-但是在此过程中，我们发现的结果是：
+但是在应用的过程中，我们发现的结果是：
 
 + BSM模型的误差（0.476）>Heston模型的误差（0.339）
 + BSM模型误差率的变化率随时间变化曲线比Heston模型起伏变化更大
@@ -37,7 +37,7 @@ The experimental conclusions from the paper are:
 - Overall goodness-of-fit: BSM model > Heston model
 - The BSM model fits better for short-term, low-value options, while the Heston model performs better for low strike price, short-term, low-value options.
 
-However, during the process, we found the following results:
+However, during the process of applying it, we found the following results:
 
 - The error of the BSM model (0.476) > The error of the Heston model (0.339)
 - The rate of change of the BSM model's error varies more significantly over time than that of the Heston model.
