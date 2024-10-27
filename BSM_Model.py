@@ -1,18 +1,18 @@
 from scipy.stats import norm
 import numpy as np
 
-# 计算公式参考：https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model
+# 计算公式参考（The formula is referenced from this website）：https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model
 
-# 计算BSM模型的期权价格
+# 计算BSM模型的期权价格（Calculating option prices for the BSM model）
 class BSM_Model:
 
     def __init__(self, S, K, T, r, sigma):
-        self.S = S  # 当前股票价格
-        self.K = K  # 行权价
-        self.T = T  # 到期时间
-        self.r = r  # 无风险利率
-        self.sigma = sigma  # 波动率，该数据通常由历史数据计算得到，一般取20%左右
-        self.option_type = "call"# 期权类型
+        self.S = S  # 当前股票价格（Current stock price）
+        self.K = K  # 行权价（strike price）
+        self.T = T  # 到期时间（maturity）
+        self.r = r  # 无风险利率（risk-free rate）
+        self.sigma = sigma  # 波动率，该数据通常由历史数据计算得到，一般取20%左右（Volatility, which is usually calculated from historical data and is generally taken to be around 20%.）
+        self.option_type = "call"# 期权类型（Type of Options）
 
     # d1: (ln(S/K) + (r + 0.5*sigma^2)*T) / (sigma*sqrt(T))
     def d1(self):
