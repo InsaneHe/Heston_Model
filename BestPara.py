@@ -7,6 +7,7 @@ import numpy as np
 import copy
 
 
+
 # 将x增加一个随机变动量，但会把x限制在a,b之内
 def random_range(x, a, b):
     random = np.random.normal(0, 0.01 * (b - a), 1)[0]
@@ -36,7 +37,7 @@ class NG:
         self.times_stay_max = 400  # 当连续未接受新解超过这个次数，终止循环
 
         self.T = 100  # 初始温度：初始温度越高，前期接受新解的概率越大
-        self.speed = 0.7  # 退火速度：温度下降速度越快，后期温度越低，接受新解的概率越小，从而最终稳定在某个解附近
+        self.speed = 0.7  # 退火速度：温度下降速度越快，后期温度越低，接受新解的概率越小，从而最终稳定在某个解附件
         self.T_min = 1e-6  # 最低温度：当低于该温度时，终止全部循环
         self.xf_best_T = {}  # 记录下接受的所有新解
 
@@ -240,7 +241,7 @@ class NGHeston(NG):
     def __init__(self, func, x0):
         super().__init__(func, x0)
         self.T = 90#初始温度
-        self.T_min = 1e-7  # 由于算法耗时太长，故小做一段模拟试试看
+        self.T_min = 1e-7  # 最低温度：由于算法耗时太长，故小做一段模拟试试看
         self.times_max = 500#每个温度下循环次数
 
     # sv模型的各个参数由于存在取值范围，因此在获得新的参数估计值时需要对其取值范围加以限制
@@ -328,86 +329,7 @@ class SV_SA:
 
         return self.error
 
-    def error_mean(self, init_params: list):
-        """计算heston模型期权定价的均方误差
-        init_params -初始参数,列表格式
-                     [v0,kappa,theta,sigma,rho]
-        """
-        v0, kappa, theta, sigma, rho = init_params
-        list_p_sv = []
-        for i in self.data.index:
-            K, t, s0, r, p_real = self.data.loc[i, :].tolist()
-            sv = Heston_Model(
-                K=K,
-                t=t,
-                S0=s0,
-                r=r,
-                v0=v0,
-                kappa=kappa,
-                theta=theta,
-                sigma=sigma,
-                rho=rho,
-            )
-            p_sv = sv.Call_Value()  # sv模型期权价格
-            list_p_sv.append(p_sv)
 
-        self.error = np.sqrt(
-            np.sum((np.array(list_p_sv) - self.data["c"]) ** 2) / len(self.data)
-        )  # sv模型的期权价格和实际价格的均方误差
-        print("\n")
-        print("第{}轮,误差：{}".format(self.cycle, self.error))  # 展示本轮的误差
-        self.cycle += 1
-
-        return self.error
-
-    def test_error_mean(self, multiple_parmas: dict):
-        """将多组初始参数输入，计算各组参数的均方误差
-        multiple_parmas -dict,多组初始参数
-                        {
-                        1:[0.01,2,0.1,0.1,-0.5],
-                        2:[0.01,2,0.1,0.1,-0.5],
-                        3:[0.01,2,0.1,0.1,-0.5]
-                        }
-        返回： -dict,记录各组初始参数的均方误差
-        """
-        dict_ = {}  # 用于记录各组初始参数的均方误差
-        for i in multiple_parmas.keys():
-            dict_[i] = self.error_mean(multiple_parmas[i])
-        return dict_
-
-    def test_option_price(self, multiple_parmas: dict):
-        """将多组期权数据和初始参数输入，将期权价格合并在表格旁边
-        multiple_parmas -dict,多组初始参数
-                        multiple_parmas={
-                        1:[1.5932492661058346, 3.3803420203705365, 0.3333248435472669, 5.622092726036617, 0.044881506437356666],
-                        2:[1.1070063457234607, 3.501301312245266, 0.6276009140316863, 9.383112611111134, -0.6092511548040354],
-                        3:[0.5675877305927083, 3.736229838972323, 0.21803303626214537, 8.74231319248172, 0.09393882921335006]
-                        }
-        返回： -dict,记录各组初始参数的均方误差
-        """
-        data_option_ = copy.deepcopy(self.data)
-        for i in multiple_parmas.keys():
-            # i=3
-            data_option_["第{}组参数".format(i)] = 0.000000
-            init_params = multiple_parmas[i]
-            for j in data_option_.index:
-                # j=8
-                option_params = data_option_.loc[j, :4].tolist()
-                sv = Heston_Model(
-                    option_params[0],
-                    option_params[1],
-                    option_params[2],
-                    option_params[3],
-                    init_params[0],
-                    init_params[1],
-                    init_params[2],
-                    init_params[3],
-                    init_params[4],
-                )
-                c_sv = sv.Call_Value()
-                data_option_.loc[j, "第{}组参数".format(i)] = c_sv
-            print("已经完成第{}组".format(i))
-        return data_option_
 
     def sa(self):
         """对均方误差函数用模拟退火算法计算最优值"""
@@ -421,8 +343,8 @@ class SV_SA:
 def getBestPara():
     data=pd.read_csv('上证50ETF期权数据.csv')#读取原始数据
 
-    date_start_train=20200612#指定待训练数据的开始日期为2020年6月12日
-    date_end_train=20200912#指定待训练数据的结束日期为2020年9月12日
+    date_start_train=20240919#选择训练数据的开始日期
+    date_end_train=20241019#选择训练数据的结束日期
     option = data[
         (data["交易日期"] >= date_start_train) & (data["交易日期"] <= date_end_train)
     ]  # 选择指定日期的数据
@@ -439,3 +361,6 @@ def getBestPara():
 
 if __name__ == "__main__":
     getBestPara()#调用函数
+
+
+    
