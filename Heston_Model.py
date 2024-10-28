@@ -50,10 +50,10 @@ class Heston_Model:
         return integral
 
     def P_Value(self, type):
-        """计算P值"""
+        """计算P值（Calculate the P-value）"""
         ifun = lambda phi: np.real(self.integral_function(phi, type=type) / (1j * phi))
 
-        # 分段积分
+        # 分段积分（Integral operations）
         intervals = [(0, 10), (10, 100), (100, 1000)]
         result = 0
         for interval in intervals:
@@ -63,7 +63,7 @@ class Heston_Model:
         return 0.5 + (1 / np.pi) * result
 
     def Call_Value(self):
-        """计算看涨期权的价格"""
+        """计算看涨期权的价格（Calculating the price of a call option）"""
         P1 = self.S0 * self.P_Value(type=1)
         P2 = self.K * np.exp(-self.r * self.t) * self.P_Value(type=2)
 
