@@ -316,3 +316,7 @@ The get_history_best_xy function is used to retrieve the historical optimal solu
 ** Functions:**
 
 Can be used for user's own remodeling in order to allow users to get the data they need from databases (Tushare), etc. for research or applications.
+
+## Important Notification
+
+It might take you some time to run the main.py as the Simulated Annealing Algorithm is time-consuming because of the condition of .the computer hardware. Also, the Simulated annealing algorithms usually require a higher number of iterations, but due to computer hardware condition, I iterated fewer times, which may have had some effect on the results.
