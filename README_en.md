@@ -1,4 +1,5 @@
 # File Structure
+## English comments can be seen in the files.
 
 ## main.py
 
